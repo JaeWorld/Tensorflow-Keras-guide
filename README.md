@@ -1,6 +1,6 @@
 # Tensorflow-guide
 
-텐서플로우 공식 사이트의 가이드 소스 코드를 모아두었습니다.
+텐서플로우 학습용으로 텐서플로우 공식 사이트의 가이드 소스 코드를 모아두었습니다.
 
 (Link: https://www.tensorflow.org/guide?hl=ko)
 

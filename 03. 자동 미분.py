@@ -18,7 +18,7 @@
 # 그 다음 텐서플로는 후진 방식 자동 미분(reverse mode differentiation)을 사용해 테이프에 "기록된" 연산의 그래디언트를 계산합니다.
 import tensorflow as tf
 
-
+# +
 
 # ------그래디언트 테이프------
 # 텐서플로우2는 즉시실행모드를 사용하는데, 자동 미분을 하기 위해 필요한 함수, 계산식과 입력 값에 대한 정보를 저장할 기능이 필요하다.
@@ -50,6 +50,7 @@ with tf.GradientTape() as t:
 dz_dy = t.gradient(z, y)
 assert dz_dy.numpy() == 8.0
 
+# +
 
 # 동일한 연산에 대해 미분을 계산하려면 persistent=True 속성을 사용.
 x = tf.constant(3.0)
@@ -66,8 +67,7 @@ print(dy_dx) # 6.0
 # 테이프에 대한 참조 삭제.
 del t
 
-
-
+# +
 
 # ------고계도 그레디언트------
 # 그래디언트 연산 자체도 미분이 가능.
@@ -82,6 +82,7 @@ d2y_dx2 = t.gradient(dy_dx, x)
 print(dy_dx)
 print(d2y_dx2)
 
+# +
 
 # 8.0 = 2.0 * x 방정식에서 변수 x의 값을 찾아보기.
 a, y = tf.constant(2.0), tf.constant(8.0)
@@ -99,5 +100,46 @@ def train_func():
     
 for i in range(4):
     train_func()
+# +
+
+# ------자동 미분을 이용한 선형 회귀 구현------
+
+# 학습될 가중치 변수 선언
+W = tf.Variable(4.0)
+b = tf.Variable(1.0)
+
+# 가설 함수 정의
+@tf.function
+def hypothesis(x):
+    return W*x + b
+
+x_test = [3.5, 5, 5.5, 6]
+print(hypothesis(x_test))
+
+
+# 손실함수 정의
+@tf.function
+def mse_loss(y_pred, y):
+    return tf.reduce_mean(tf.square(y_pred - y))
+
+
+X = [1,2,3,4,5,6,7,8,9]
+y = [11,22,33,44,55,66,77,87,95]
+
+# optimizer 정의
+optimizer = tf.optimizers.SGD(0.01)
+
+
+for i in range(301):
+    with tf.GradientTape() as t:
+        y_pred = hypothesis(X)
+        cost = mse_loss(y_pred, y)
+        
+    gradients = t.gradient(cost, [W, b])
+    
+    optimizer.apply_gradients(zip(gradients, [W, b]))
+    
+    if i % 10 == 0:
+        print(f"epoch: {i:3} | W의 값: {W.numpy():5.4f} | cost: {b.numpy():5.6f}")
 
 

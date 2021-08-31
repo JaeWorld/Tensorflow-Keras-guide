@@ -7,7 +7,7 @@
 코드에 대한 설명은 한글 주석으로 표기하였습니다.
 
 ---
-<Tensorflow 공식 사이트 가이드 링크>
+<Tensorflow 공식 사이트 가이드>
 (Link: https://www.tensorflow.org/guide?hl=ko)
 
 <딥 러닝을 이용한 자연어 처리>
